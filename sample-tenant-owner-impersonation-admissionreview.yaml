@@ -1,0 +1,79 @@
+---
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1
+request:
+  uid: 7948269a-2298-4b97-9072-70fd5c3bfab5
+  kind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+  resource:
+    group: networking.k8s.io
+    version: v1
+    resource: ingresses
+  requestKind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+  requestResource:
+    group: networking.k8s.io
+    version: v1
+    resource: ingresses
+  name: silver-ingress
+  namespace: default
+  operation: DELETE
+  userInfo:
+    username: kubernetes-admin
+    groups:
+    - system:masters
+    - system:authenticated
+  object:
+  oldObject:
+    kind: Ingress
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: silver-ingress
+      namespace: default
+      uid: 6904a7e3-5f60-4123-a94b-2a951410757b
+      resourceVersion: '1231'
+      generation: 1
+      creationTimestamp: '2023-11-02T19:08:38Z'
+      annotations:
+        kubectl.kubernetes.io/last-applied-configuration: '{"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/rewrite-target":"/"},"name":"silver-ingress","namespace":"default"},"spec":{"ingressClassName":"silver","rules":[{"http":{"paths":[{"backend":{"service":{"name":"test","port":{"number":80}}},"path":"/silver","pathType":"Prefix"}]}}]}}
+
+          '
+        nginx.ingress.kubernetes.io/rewrite-target: "/"
+      managedFields:
+      - manager: kubectl-client-side-apply
+        operation: Update
+        apiVersion: networking.k8s.io/v1
+        time: '2023-11-02T19:08:38Z'
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              ".": {}
+              f:kubectl.kubernetes.io/last-applied-configuration: {}
+              f:nginx.ingress.kubernetes.io/rewrite-target: {}
+          f:spec:
+            f:ingressClassName: {}
+            f:rules: {}
+    spec:
+      ingressClassName: silver
+      rules:
+      - http:
+          paths:
+          - path: "/silver"
+            pathType: Prefix
+            backend:
+              service:
+                name: test
+                port:
+                  number: 80
+    status:
+      loadBalancer: {}
+  dryRun: false
+  options:
+    kind: DeleteOptions
+    apiVersion: meta.k8s.io/v1
+    propagationPolicy: Background

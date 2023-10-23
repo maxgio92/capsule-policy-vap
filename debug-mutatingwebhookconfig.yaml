@@ -1,0 +1,16 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: aaaaaaaaaaaaaa # alphabetically ordered, call it as soon as possible
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    url: <YOUR_EXPOSED_INTERCEPTOR>
+  name: ingresses.vap.capsule.clastix.io
+  rules:
+  - apiGroups: ["networking.k8s.io"]
+    apiVersions: ["v1"]
+    operations: ["CREATE", "UPDATE"]
+    resources: ["ingresses"]
+  sideEffects: None

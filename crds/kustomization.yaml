@@ -1,0 +1,4 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- https://raw.githubusercontent.com/projectcapsule/capsule/v0.3.3/config/crd/bases/capsule.clastix.io_tenants.yaml
