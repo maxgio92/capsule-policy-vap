@@ -5,19 +5,23 @@ metadata:
   name: tenant-ingressclass
 spec:
   failurePolicy: Fail
+  # The Tenant CR is the source of truth for the allowed resource class
+  # to be created or updated, by Tenant users.
   paramKind:
     apiVersion: capsule.clastix.io/v1beta2
     kind: Tenant
-  # Evaluate this policy only for requests made by user groups
-  # in `CapsuleConfiguration.spec.capsuleGroup`.
   # TODO: match also non-User Tenant owners.
   # TODO: find a way to parameterize also the CapsuleGroup (i.e. 'capsule.clastix.io').
-  # TODO: support impersonation. See sample-tenant-owner-impersonation-admissionreview.yaml.
+  # TODO: support impersonation. See sample-tenant-owner-impersonation-admissionreview.yaml
+  #
+  # Evaluate this policy only for requests made by users in Tenant.owners and group 'capsule.clastix.io',
+  # that represents all Tenant owners.
+  # The policy is supposed to be bound with the specific Tenant, with a ValidatingAdmissionPolicyBinding.
   matchConditions:
   - expression: "(request.userInfo.groups.all(e, (e in ['capsule.clastix.io'])) && request.userInfo.username in params.spec.owners.filter(e, e.kind == 'User').map(x, x.name))"
     name: include-only-tenant-owners
   matchConstraints:
-    # Match also for different requests on object's api versions.
+    # Match also for different requests on object's API versions.
     matchPolicy: Equivalent
     resourceRules:
     - apiGroups: ["networking.k8s.io"]
@@ -27,6 +31,7 @@ spec:
   validations:
   # TODO: support allowedRegex besides exact class list.
   # TODO: support params, as documented in https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/#validation-expression.
+  #
   #- expression: "object.spec.ingressClassName in params.spec.ingressOptions.allowedClass.allowed"
   #
   # The status.typeChecking returns an expressionWarning:
