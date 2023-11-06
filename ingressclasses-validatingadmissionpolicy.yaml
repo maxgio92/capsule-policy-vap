@@ -32,12 +32,10 @@ spec:
   # TODO: support allowedRegex besides exact class list.
   # TODO: support params, as documented in https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/#validation-expression.
   #
-  #- expression: "object.spec.ingressClassName in params.spec.ingressOptions.allowedClass.allowed"
-  #
-  # The status.typeChecking returns an expressionWarning:
-  # networking.k8s.io/v1, Kind=Ingress: ERROR: <input>:1:33: undeclared reference to 'params' (in container '')
-  #         | object.spec.ingressClassName in params.spec.ingressOptions.allowedClass.allowed
-  - expression: "object.spec.ingressClassName in ['bronze']"
+  # Allow only ingress class that are allowed as declared in the Tenant.spec.ingressOptions.allowedClass.allowed.
+  # effect would be like:
+  # - expression: "object.spec.ingressClassName in ['bronze']"
+  - expression: "object.spec.ingressClassName in params.spec.ingressOptions.allowedClasses.allowed"
     message: "Ingress class not allowed"
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
